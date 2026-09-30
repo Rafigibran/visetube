@@ -47,6 +47,24 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean assembleStmobileRelease
 
+      - name: Verify APK identity and signature
+        run: |
+          set -euo pipefail
+          BUILD_TOOLS="$(ls -d "$ANDROID_HOME"/build-tools/[0-9]* | sort -V | tail -1)"
+          shopt -s nullglob
+          apks=(smarttubetv/build/outputs/renamed_apks/stmobileRelease/ViseTube_*.apk)
+          if [ "${#apks[@]}" -eq 0 ]; then
+            echo "::error::No ViseTube APKs found"
+            exit 1
+          fi
+          for apk in "${apks[@]}"; do
+            echo "=== $(basename "$apk") ==="
+            badging="$("$BUILD_TOOLS/aapt" dump badging "$apk")"
+            echo "$badging" | grep -m1 "^package: name='com.rafgibran.visetube'"
+            echo "$badging" | grep -m1 "label='ViseTube'"
+            "$BUILD_TOOLS/apksigner" verify --verbose "$apk"
+          done
+
       - name: VirusTotal Scan
         if: ${{ env.HAS_VT_KEY == 'true' }}
         id: vt
