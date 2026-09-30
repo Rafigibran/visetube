@@ -6,6 +6,8 @@
 
 ### Built on SmartTube. Made for your phone.
 
+**Developer:** Rafi Gibran
+
 An unofficial YouTube client for Android phones and tablets, built on
 [SmartTube](https://github.com/yuliskov/SmartTube) by [@yuliskov](https://github.com/yuliskov).<br>
 Sign in with a code, keep it playing in the background, save videos for offline,
