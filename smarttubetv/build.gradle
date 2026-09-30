@@ -44,7 +44,7 @@ abstract class CopyRenamedApks extends DefaultTask {
         builtArtifacts.elements.each { artifact ->
             def abi = artifact.filters.find { it.filterType.toString() == 'ABI' }?.identifier ?: 'universal'
             def version = artifact.versionName ?: 'unknown'
-            def outputFile = new File(outputDirectory, "NewTube_${version}_${abi}.apk")
+            def outputFile = new File(outputDirectory, "ViseTube_${version}_${abi}.apk")
             Files.copy(new File(artifact.outputFile).toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
         }
     }
@@ -95,7 +95,7 @@ abstract class EmbeddedArtProfileTask extends DefaultTask {
         def hrf = humanReadableProfile.files.find { it.isFile() }
         def dexes = dexFiles.files.findAll { it.isFile() && it.name ==~ /classes\d*\.dex/ }
         if (!profgenFile.canExecute() || hrf == null || dexes.isEmpty()) {
-            logger.warn("NewTube: no embedded ART profile (profgen=${profgenFile.canExecute()}, " +
+            logger.warn("ViseTube: no embedded ART profile (profgen=${profgenFile.canExecute()}, " +
                     "profile=${hrf != null}, dex=${dexes.size()}); install-time compilation stays off")
             return
         }
@@ -145,7 +145,7 @@ android {
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "app.smarttube"
+        applicationId "com.rafgibran.visetube"
         minSdk = project.ext.minSdkVersion
         targetSdk = project.ext.targetSdkVersion
         versionCode 2387
@@ -279,7 +279,7 @@ android {
             // package name never has to change if the app is ever renamed — "arc" ties to the
             // arch-"n" launcher mark (Catalan for "arch"). This ID is permanent once released;
             // do not couple it to the marketing name. See docs/gtm + the legal-risk memo.
-            applicationId "io.github.aleixrodriala.arc"
+            applicationId "com.rafgibran.visetube"
             minSdk = 24 // media3 1.10.x floor is 23; 24 = project-wide minimum
             targetSdk = project.ext.targetSdkVersion
             // NewTube versions independently of upstream SmartTube (defaultConfig carries the
