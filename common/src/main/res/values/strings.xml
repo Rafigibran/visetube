@@ -64,7 +64,7 @@
     <!-- NEWTUBE(settings): the phone's About screen (AboutSimpleSettingsPresenter). -->
     <string name="about_app">About %1$s</string>
     <string name="about_source_code">Source code</string>
-    <string name="about_source_code_url" translatable="false">https://github.com/aleixrodriala/newtube</string>
+    <string name="about_source_code_url" translatable="false">https://github.com/Rafigibran/visetube</string>
     <string name="about_license">License</string>
     <string name="about_license_name" translatable="false">MIT</string>
     <string name="about_license_url" translatable="false">https://github.com/Rafigibran/visetube/blob/main/LICENSE</string>
