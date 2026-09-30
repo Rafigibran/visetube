@@ -199,6 +199,10 @@ android {
 
             if (keystorePropertiesFile.exists()) {
                 signingConfig signingConfigs.release
+            } else {
+                // CI/test builds without a release keystore remain installable using Android's debug key.
+                // Production releases should provide keystore.properties with the real release key.
+                signingConfig signingConfigs.debug
             }
         }
         // Use same key for release and debug for testing
