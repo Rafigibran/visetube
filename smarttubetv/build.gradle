@@ -263,6 +263,8 @@ android {
         // media3 player APIs are @UnstableApi; release runs lintVital with abortOnError, so the
         // opt-in check must stay off (the code deliberately uses the unstable player surface).
         disable 'UnsafeOptInUsageError'
+        // The mobile port intentionally uses an API-30 capability numeric fallback on minSdk 24.
+        disable 'WrongConstant'
         //checkReleaseBuilds false // fix for ClassNotFoundException: com.android.tools.lint.client.api.Vendor
     }
 
