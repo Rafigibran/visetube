@@ -5,7 +5,7 @@ name: Build release
 # draft stays a manual step, and publishing is what starts the VirusTotal scan.
 #
 # The attestation lets anyone check that an APK was built here, from the tagged source:
-#   gh attestation verify NewTube_<version>_arm64-v8a.apk -R aleixrodriala/newtube
+#   gh attestation verify ViseTube_<version>_arm64-v8a.apk -R Rafigibran/visetube
 #
 # The signing key only exists in the `release` environment's secrets, which only `main` and
 # `v*` tags can use: RELEASE_KEYSTORE_BASE64 (the .jks file, base64), RELEASE_KEYSTORE_PASSWORD,
@@ -90,13 +90,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir dist
-          cp smarttubetv/build/outputs/renamed_apks/stmobileRelease/NewTube_*.apk dist/
+          cp smarttubetv/build/outputs/renamed_apks/stmobileRelease/ViseTube_*.apk dist/
           ls -l dist
           if [ -n "$TAG" ]; then
             version="${TAG#v}"
             for apk in dist/*.apk; do
               case "$(basename "$apk")" in
-                "NewTube_${version}_"*) ;;
+                "ViseTube_${version}_"*) ;;
                 *) echo "::error::$(basename "$apk") doesn't match tag $TAG. Bump versionName first."; exit 1 ;;
               esac
             done
@@ -108,10 +108,10 @@ jobs:
             certs="$(printf '%s\n' "$out" | grep -oE 'certificate SHA-256 digest: [0-9a-f]{64}' | awk '{print $4}' | sort -u)"
             if [ "$certs" != "$EXPECTED_CERT" ]; then
               echo "$out"
-              echo "::error::$(basename "$apk") is signed with '${certs}', not NewTube's certificate."
+              echo "::error::$(basename "$apk") is signed with '${certs}', not the expected release certificate."
               exit 1
             fi
-            echo "$(basename "$apk"): signed with NewTube's certificate"
+            echo "$(basename "$apk"): signed with the expected release certificate"
           done
           (cd dist && sha256sum -- *.apk > SHA256SUMS && cat SHA256SUMS)
 
@@ -134,7 +134,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: NewTube-${{ env.TAG || github.sha }}
+          name: ViseTube-${{ env.TAG || github.sha }}
           if-no-files-found: ignore
           path: dist/
           retention-days: 14
@@ -153,6 +153,6 @@ jobs:
             fi
             gh release upload "$TAG" dist/* --clobber
           else
-            gh release create "$TAG" dist/* --draft --verify-tag --title "NewTube ${TAG#v}" \
+            gh release create "$TAG" dist/* --draft --verify-tag --title "ViseTube ${TAG#v}" \
               --notes "Built by GitHub Actions run ${{ github.run_id }} from $TAG. Write the notes, then publish."
           fi
